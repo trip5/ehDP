@@ -66,6 +66,14 @@ String EhDP::_buildJson() {
   // Required
   doc["proto"] = EHDP_PROTO;
   doc["ip"]    = WiFi.localIP().toString();
+  // Name fields (at least one recommended)
+  if (_name.length())          doc["name"]             = _name;
+  if (_project.length())       doc["project"]          = _project;
+  if (_firmware.length())      doc["firmware"]         = _firmware;
+  // Extra info
+  if (_version.length())       doc["version"]          = _version;
+  if (_mdns.length())          doc["mdns"]             = _mdns;
+  if (_uiPort > 0)             doc["ui_port"]          = _uiPort;
   // Material symbol (optional)
   if (_materialSymbol.length()) {
     // Try to parse as integer if it doesn't start with "0x"
@@ -81,14 +89,6 @@ String EhDP::_buildJson() {
       }
     }
   }
-  // Name fields (at least one recommended)
-  if (_project.length())       doc["project"]          = _project;
-  if (_firmware.length())      doc["firmware"]         = _firmware;
-  if (_name.length())          doc["name"]             = _name;
-  // Extra info
-  if (_version.length())       doc["version"]          = _version;
-  if (_mdns.length())          doc["mdns"]             = _mdns;
-  if (_uiPort > 0)             doc["ui_port"]          = _uiPort;
   if (_capCount > 0) {
     JsonArray caps = doc["capabilities"].to<JsonArray>();
     for (uint8_t i = 0; i < _capCount; i++) {

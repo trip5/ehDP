@@ -94,24 +94,21 @@ def print_devices(devices: list) -> None:
             print(f"  Protocol: {proto}")
         else:
             print(f"  Unofficial Protocol: {proto}")
+        print(f"  IP      : {d.get('ip', d.get('_source_ip', '?'))}")
         if d.get("name"):
             print(f"  Name    : {d['name']}")
         if d.get("project"):
             print(f"  Project : {d['project']}")
         if d.get("firmware"):
             print(f"  Firmware: {d['firmware']}")
-        if d.get("material_symbol"):
-            print(f"  Symbol  : {d['material_symbol']}")
-        print(f"  IP      : {d.get('ip', d.get('_source_ip', '?'))}")
         if d.get("version"):
             print(f"  Version : {d['version']}")
         if d.get("mdns"):
             print(f"  mDNS    : {d['mdns']}")
         if d.get("ui_port"):
-            host = d.get("mdns") or d.get("ip", d.get("_source_ip", "?"))
-            port = d["ui_port"]
-            url = f"http://{host}/" if port == 80 else f"http://{host}:{port}/"
-            print(f"  UI      : {url}")
+            print(f"  UI Port : {d['ui_port']}")
+        if d.get("material_symbol"):
+            print(f"  Symbol  : {d['material_symbol']}")
         if d.get("capabilities"):
             print(f"  Caps    : {', '.join(d['capabilities'])}")
         print()

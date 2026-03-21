@@ -50,7 +50,7 @@ void setup() {
     }
     Serial.println("\nConnected! IP: " + WiFi.localIP().toString());
 
-    // Required
+    // Required for WebUI
     ehdp.setUIPort(DEVICE_UI_PORT);
 
     // At least one of project / firmware / name is recommended

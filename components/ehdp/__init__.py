@@ -92,7 +92,7 @@ async def to_code(config):
     mdns = config.get(CONF_MDNS)
     if mdns is None:
         if 'mdns' not in CORE.config or not CORE.config['mdns'].get('disabled', False):
-            mdns = f"{CORE.config['esphome']['name']}.local"
+            mdns = CORE.config['esphome']['name']  # Just the hostname, no suffix
     
     if mdns:
         cg.add(var.set_mdns(mdns))

@@ -79,9 +79,9 @@ class EhDP
         var response = {
             "proto": self.PROTO,
             "ip": wifi["ip"],
+            "name": device_name,
             "project": "Tasmota",
             "firmware": tasmota.version(),
-            "name": device_name,
             "mdns": hostname,
             "ui_port": 80
         }

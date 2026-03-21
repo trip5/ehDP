@@ -124,6 +124,17 @@ std::string EhDPComponent::build_json_() {
   std::string out = "{";
   out += "\"proto\":\"" + std::string(PROTO) + "\"";
   out += ",\"ip\":\""    + ip    + "\"";
+  if (!name_.empty())     out += ",\"name\":\""     + name_     + "\"";
+  if (!project_.empty())  out += ",\"project\":\""  + project_  + "\"";
+  if (!firmware_.empty()) out += ",\"firmware\":\"" + firmware_ + "\"";
+  if (!version_.empty())  out += ",\"version\":\""  + version_  + "\"";
+  if (!mdns_.empty())     out += ",\"mdns\":\""     + mdns_     + "\"";
+  if (ui_port_ > 0) {
+    char port_buf[8];
+    snprintf(port_buf, sizeof(port_buf), "%u", ui_port_);
+    out += ",\"ui_port\":";
+    out += port_buf;
+  }
   if (!material_symbol_.empty()) {
     // Check if it's a hex string or should be sent as integer
     if (material_symbol_[0] == '0' && (material_symbol_[1] == 'x' || material_symbol_[1] == 'X')) {
@@ -132,17 +143,6 @@ std::string EhDPComponent::build_json_() {
       // Try to send as integer (no quotes)
       out += ",\"material_symbol\":" + material_symbol_;
     }
-  }
-  if (!project_.empty())  out += ",\"project\":\""  + project_  + "\"";
-  if (!firmware_.empty()) out += ",\"firmware\":\"" + firmware_ + "\"";
-  if (!name_.empty())     out += ",\"name\":\""     + name_     + "\"";
-  if (!version_.empty())  out += ",\"version\":\""  + version_  + "\"";
-  if (!mdns_.empty())     out += ",\"mdns\":\""     + mdns_     + "\"";
-  if (ui_port_ > 0) {
-    char port_buf[8];
-    snprintf(port_buf, sizeof(port_buf), "%u", ui_port_);
-    out += ",\"ui_port\":";
-    out += port_buf;
   }
   if (!capabilities_.empty()) {
     out += ",\"capabilities\":[";
