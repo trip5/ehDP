@@ -1,0 +1,64 @@
+# ehDP Full Example Configuration (ESPHome)
+#
+# Copy and adapt this file for your device.
+
+esphome:
+  name: my-clock
+  friendly_name: My Clock
+  project:
+    name: "myclock"
+    version: "1.0"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# If you disable mDNS, do NOT set the 'mdns' field in the ehdp section below.
+# mdns:
+#   disabled: true
+
+logger:
+api:
+ota:
+  - platform: esphome
+
+# ---------------------------------------------------------------------------
+# Load ehDP as an external component from GitHub — no manual installation.
+# ---------------------------------------------------------------------------
+external_components:
+  - source:
+      type: git
+      url: https://github.com/trip5/ehDP
+      ref: main
+    components: [ehdp]
+
+# ---------------------------------------------------------------------------
+# ehDP discovery configuration
+# ---------------------------------------------------------------------------
+ehdp:
+  # OPTIONAL: Material symbol codepoint (hex string recommended for compatibility)
+  #   See: https://fonts.google.com/icons
+  #   Examples: "0xe03e" (radio), "0xe0f0" (lightbulb), "0xe192" (clock)
+  material_symbol: "0xe192"
+
+  # Values for project, firmware, name, and mdns are automatically pulled 
+  # from your global 'esphome:' section, reducing configuration redundancy.
+  # The ui_port is automatically detected from the web_server component.
+  #
+  # You can still override them here if you wish:
+
+  # name: "Custom Name"
+  # project: "Custom Project"
+  # firmware: "Custom Firmware"
+  # version: "2.22"
+  # mdns: "customhost"
+  # ui_port: 80
+  # webui: false  # Set to false to prevent UI port from being advertised
+  # capabilities:
+  #   - mqtt
+  #   - homeassistant

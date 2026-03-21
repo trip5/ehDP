@@ -1,0 +1,39 @@
+{
+  "name": "ehDP",
+  "version": "1.0.0",
+  "description": "Lightweight UDP discovery protocol for ESP32/ESP8266. Devices respond to a broadcast with a JSON identity packet — no REST API or web server required.",
+  "keywords": ["esp32", "esp8266", "discovery", "udp", "iot", "network", "json", "zero-config"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trip5/ehDP"
+  },
+  "authors": [
+    {
+      "name": "Trip5",
+      "url": "https://github.com/trip5"
+    }
+  ],
+  "frameworks": ["arduino"],
+  "platforms": ["espressif32", "espressif8266"],
+  "license": "LGPL-2.1-only",
+  "export": {
+    "include": [
+      "src/*.cpp",
+      "include/*.h",
+      "examples/*",
+      "library.properties"
+    ]
+  },
+  "examples": [
+    {
+      "name": "BasicResponder",
+      "base": "examples/BasicResponder",
+      "files": ["BasicResponder.ino"]
+    },
+    {
+      "name": "RadioResponder",
+      "base": "examples/RadioResponder",
+      "files": ["RadioResponder.ino"]
+    }
+  ]
+}
