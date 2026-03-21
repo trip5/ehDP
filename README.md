@@ -33,7 +33,7 @@ lib_deps =
 
 ## Usage
 
-To use the ESPFileUpdater library in your project, include the header file, configure ehDP in your setup, and call the `loop` function in your own `loop`. Here is a basic example:
+To use the ehDP library in your project, include the header file, configure ehDP in your setup, and call the `loop` function in your own `loop`. Here is a basic example:
 
 ```cpp
 #include <ehDP.h>
