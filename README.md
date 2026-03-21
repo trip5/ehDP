@@ -5,7 +5,6 @@
 ## Overview
 
 The ehDP Library is a simple and lightweight discovery protocol designed for local networks. Just send a UDP broadcast and get instant JSON responses from all your ehDP-capable devices.
-Using [ehDP Scanner](https:// play store link), a user can use a single app to easily access all devices with WebUIs on their local network.
 
 ## Why?
 
@@ -172,7 +171,7 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 ## Links
 
-- [Protocol Specification](https://github.com/trip5/ehDP/SPEC.md)
+- [Protocol Specification](https://github.com/trip5/ehDP/blob/main/SPEC.md)
 - [GitHub Repository](https://github.com/trip5/ehDP)
 
 ---
@@ -187,6 +186,6 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 ## License
 
-LGPL-2.1** — Free to use, modify, and embed in your projects.
+LGPL-2.1 — Free to use, modify, and embed in your projects.
 
 See [LICENSE](LICENSE) for details.

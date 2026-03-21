@@ -1,6 +1,6 @@
 # ehDP — eh Discovery Protocol Specification
 
-> Version: 1.0  
+Version: 1.0  
 
 ---
 
