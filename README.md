@@ -1,20 +1,18 @@
 # ehDP (eh Discovery Protocol) Library
 
-[![License: LGPL-2.1](https://img.shields.io/badge/License-LGPL%202.1-blue.svg)](LICENSE)
-
 ## Overview
 
 The ehDP Library is a simple and lightweight discovery protocol designed for local networks. Just send a UDP broadcast and get instant JSON responses from all your ehDP-capable devices.
 
 ## Why?
 
-Many ESP-based devices include a Web UI dashboard but without Home Assistant integration, it becomes tedious to type type in it's IP address into a mobile device's browser.
+Many ESP-based devices include a Web UI dashboard but without Home Assistant integration, it becomes tedious to type type in IP addresses into a mobile device's browser.
 
 This library, combined with an app like [eh Device Scanner](https://) simplifies this.  All devices listed and accessible with a single touch.
 
 ### Features
 
-- Fast: Single UDP broadcast discovers all devices in milliseconds
+- Fast: Single UDP broadcast discovers all devices in seconds
 - Zero-config: No mDNS, no Bonjour, no complex setup
 - Minimal memory and code size
 - Works on Arduino, ESPHome, Tasmota (with Berry), Python
@@ -33,7 +31,7 @@ lib_deps =
 
 ## Usage
 
-To use the ehDP library in your project, include the header file, configure ehDP in your setup, and call the `loop` function in your own `loop`. Here is a basic example:
+To use the ehDP library in your project, include the header file, configure ehDP in your setup, and call `ehDP.loop()` function in your own `loop()`. Here is a basic example:
 
 ```cpp
 #include <ehDP.h>
@@ -103,11 +101,16 @@ This is a standard Layer 3 limitation shared by all broadcast-based discovery pr
 
 ### ESPHome Component
 
-Fully automatic metadata extraction—no manual configuration needed (except an icon).
+Fully automatic metadata extraction. No manual configuration needed (but an icon would be nice).
 
 ```yaml
 external_components:
-  - source: github://trip5/ehDP/components
+  - source:
+      type: git
+      url: https://github.com/trip5/ehDP
+      ref: main
+    refresh: 60s
+    components: [ ehdp ]
 
 ehdp:
   material_symbol: "0xe03e"  # Radio symbol (optional)
@@ -132,19 +135,7 @@ esphome:
     version: "${project_version}"
 ```
 
-Please see the `yml` file for more notes and on how to over-ride default derived fields.
-
----
-
-### Tasmota Berry Script
-
-Drop-in Berry script for Tasmota devices with persistent configuration.  Untested.
-
-Upload `ehdp.be` via Tasmota's web UI?
-
-```
-EhDPIcon 0xe0f0
-```
+Please see the [`ehdp.yaml`](ESPHome/ehdp.yaml) file for more notes and on how to over-ride default derived fields.
 
 ---
 
@@ -171,8 +162,8 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 ## Links
 
-- [Protocol Specification](https://github.com/trip5/ehDP/blob/main/SPEC.md)
-- [GitHub Repository](https://github.com/trip5/ehDP)
+- [Protocol Specification](https://github.com/trip5/ehDP/blob/main/ProtocolSpec.md)
+- [eh Device Scanner](https://github.com/trip5/eh-Device-Scanner) (Android App)
 
 ---
 
@@ -180,7 +171,7 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 | Date       | Version | Release Notes             |
 | ---------- | ------- |-------------------------- |
-| 2026.03.21 | 1.0.0   | First release of specification, libraries, ESPHome component, Tasmota-Berry script (untested) |
+| 2026.03.22 | 1.0.0   | First release of libraries, ESPHome component |
 
 ---
 

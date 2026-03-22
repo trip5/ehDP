@@ -27,23 +27,17 @@ api:
 ota:
   - platform: esphome
 
-# ---------------------------------------------------------------------------
-# Load ehDP as an external component from GitHub — no manual installation.
-# ---------------------------------------------------------------------------
 external_components:
   - source:
       type: git
       url: https://github.com/trip5/ehDP
       ref: main
-    components: [ehdp]
+    refresh: 60s
+    components: [ ehdp ]
 
-# ---------------------------------------------------------------------------
-# ehDP discovery configuration
-# ---------------------------------------------------------------------------
 ehdp:
   # OPTIONAL: Material symbol codepoint (hex string recommended for compatibility)
   #   See: https://fonts.google.com/icons
-  #   Examples: "0xe03e" (radio), "0xe0f0" (lightbulb), "0xe192" (clock)
   material_symbol: "0xe192"
 
   # Values for project, firmware, name, and mdns are automatically pulled 

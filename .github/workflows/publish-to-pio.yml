@@ -10,6 +10,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout repository
@@ -22,7 +23,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade platformio
 
+      - name: Prepare package for PlatformIO
+        run: |
+          mkdir -p /tmp/pio-package
+          cp -r examples /tmp/pio-package/
+          cp -r include /tmp/pio-package/
+          cp -r src /tmp/pio-package/
+          cp README.md /tmp/pio-package/
+          cp library.json /tmp/pio-package/
+          cp library.properties /tmp/pio-package/
+          cp LICENSE /tmp/pio-package/
+
+      - name: Filter README for PlatformIO
+        run: python .github/workflows/filter_readme.py /tmp/pio-package/README.md
+
       - name: Publish to PlatformIO
         run: pio pkg publish --no-interactive
+        working-directory: /tmp/pio-package
         env:
           PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
