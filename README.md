@@ -8,7 +8,7 @@ The ehDP Library is a simple and lightweight discovery protocol designed for loc
 
 Many ESP-based devices include a Web UI dashboard but without Home Assistant integration, it becomes tedious to type type in IP addresses into a mobile device's browser.
 
-This library, combined with an app like [eh Device Scanner](https://) simplifies this.  All devices listed and accessible with a single touch.
+This library, combined with an app like [eh Device Scanner](https://github.com/trip5/eh-Device-Scanner) simplifies this.  All devices are listed and accessible easily.
 
 ### Features
 
