@@ -24,8 +24,8 @@ Using [ehDP Scanner](https:// play store link), a user can use a single app to e
 
 ## Discovery Process
 
-1. Scanner → Broadcast**: Send UDP packet containing `EHDP_DISCOVER` to port 11867 on broadcast addresses (255.255.255.255 and interface-specific broadcasts)
-2. Device → Response**: Devices reply with JSON payload to the sender's address
+1. Scanner → Broadcast: Send UDP packet containing `EHDP_DISCOVER` to port 11867 on broadcast addresses (255.255.255.255 and interface-specific broadcasts)
+2. Device → Response: Devices reply with JSON payload to the sender's address
 3. Scanner: Parse JSON responses and display discovered devices
 
 ---
