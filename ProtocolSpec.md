@@ -173,8 +173,8 @@ The `ehdp/X` version identifier is reserved for protocol versions ratified by th
 
 - New official versions require approval by the project maintainer.
 - Forks or extensions that are not ratified must not use the `ehdp/X` identifier.
-- Unofficial variants should use a distinct version string, e.g. `myfork/1` or `com.mycompany.ehdp/1`.
-- This ensures that a device advertising `proto: "ehdp/1"` is unambiguously conformant with this specification.
+- Unofficial variants should use a distinct version string, e.g. `myfork/1.0` or `com.mycompany.ehdp/1.0`.
+- This ensures that a device advertising `proto: "ehdp/1.0"` is unambiguously conformant with this specification.
 
 This governance applies to the protocol identifier only. The library source code is licensed under the GNU Lesser General Public License v2.1 (LGPL-2.1) — see `LICENSE`.
 
