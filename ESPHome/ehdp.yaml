@@ -40,6 +40,11 @@ ehdp:
   #   See: https://fonts.google.com/icons
   material_symbol: "0xe192"
 
+  # OPTIONAL: id
+  #   With an id, you can call disable or enable in lambdas (eee below).
+  # id: my_ehdp
+
+
   # Values for project, firmware, name, and mdns are automatically pulled 
   # from your global 'esphome:' section, reducing configuration redundancy.
   # The ui_port is automatically detected from the web_server component.
@@ -56,3 +61,13 @@ ehdp:
   # capabilities:
   #   - mqtt
   #   - homeassistant
+
+# Example switch to disable/enable Discovery
+switch:
+  - platform: template
+    name: "ehDP Discovery"
+    lambda: return id(my_ehdp).is_enabled();
+    turn_on_action:
+      - lambda: id(my_ehdp).enable();
+    turn_off_action:
+      - lambda: id(my_ehdp).disable();

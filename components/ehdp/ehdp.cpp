@@ -156,5 +156,24 @@ std::string EhDPComponent::build_json_() {
   return out;
 }
 
+void EhDPComponent::disable() {
+  if (sock_ < 0) return;
+  ESP_LOGI(TAG, "Disabling ehDP discovery");
+  #ifdef ESP32
+    close(sock_);
+  #else
+    WiFiUDP *udp = (WiFiUDP *)sock_;
+    udp->stop();
+    delete udp;
+  #endif
+  sock_ = -1;
+}
+
+void EhDPComponent::enable() {
+  if (sock_ >= 0) return; // Already enabled
+  ESP_LOGI(TAG, "Enabling ehDP discovery");
+  setup(); // Re-run setup to bind socket
+}
+
 }  // namespace ehdp
 }  // namespace esphome

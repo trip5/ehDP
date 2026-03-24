@@ -167,11 +167,19 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 ---
 
-## Update History
+## Arduino Library Update History
 
 | Date       | Version | Release Notes             |
 | ---------- | ------- |-------------------------- |
-| 2026.03.22 | 1.0.0   | First release of libraries, ESPHome component |
+| 2026.03.22 | 1.0.0   | First release             |
+
+## ESPHome COmponent Update History
+
+| Date       | Version | Release Notes             |
+| ---------- | ------- |-------------------------- |
+| 2026.03.24 | 1.0.1   | Enable/disable added      |
+| 2026.03.22 | 1.0.0   | First release             |
+
 
 ---
 

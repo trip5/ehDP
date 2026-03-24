@@ -21,6 +21,9 @@ class EhDPComponent : public Component {
   void set_mdns(const char *val)            { mdns_ = val; }
   void set_ui_port(uint16_t port)           { ui_port_ = port; }
   void add_capability(const char *cap)      { capabilities_.push_back(cap); }
+  void disable();
+  void enable();
+  bool is_enabled() const                   { return sock_ >= 0; }
 
  protected:
   std::string name_;
