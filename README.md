@@ -173,11 +173,11 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 | ---------- | ------- |-------------------------- |
 | 2026.03.22 | 1.0.0   | First release             |
 
-## ESPHome COmponent Update History
+## ESPHome Component Update History
 
 | Date       | Version | Release Notes             |
 | ---------- | ------- |-------------------------- |
-| 2026.03.24 | 1.0.1   | Enable/disable added      |
+| 2026.03.24 |         | Enable/disable added      |
 | 2026.03.22 | 1.0.0   | First release             |
 
 
