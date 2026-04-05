@@ -177,6 +177,7 @@ Check the `examples` folder for examples of how to add the ehDP library to your 
 
 | Date       | Version | Release Notes             |
 | ---------- | ------- |-------------------------- |
+| 2026.04.05 |         | Enable/disable fixed      |
 | 2026.03.24 |         | Enable/disable added      |
 | 2026.03.22 | 1.0.0   | First release             |
 

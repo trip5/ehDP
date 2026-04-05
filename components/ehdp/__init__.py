@@ -2,6 +2,9 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
 from esphome.core import CORE
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 CODEOWNERS = ["@trip5"]
 DEPENDENCIES = ["wifi"]
@@ -19,6 +22,7 @@ CONF_MDNS           = "mdns"
 CONF_UI_PORT        = "ui_port"
 CONF_WEBUI          = "webui"
 CONF_CAPABILITIES   = "capabilities"
+CONF_ENABLE_DISABLE = "enable_disable"
 
 
 def validate_has_name(config):
@@ -42,6 +46,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(CONF_UI_PORT):     cv.int_range(min=1, max=65535),
             cv.Optional(CONF_WEBUI, default=True): cv.boolean,
             cv.Optional(CONF_CAPABILITIES): cv.ensure_list(cv.string),
+            cv.Optional(CONF_ENABLE_DISABLE, default=False): cv.boolean,
         }
     ).extend(cv.COMPONENT_SCHEMA),
     validate_has_name,
@@ -117,3 +122,15 @@ async def to_code(config):
     if CONF_CAPABILITIES in config:
         for cap in config[CONF_CAPABILITIES]:
             cg.add(var.add_capability(cap))
+
+    # 8. Enable/Disable feature (opt-in)
+    if config[CONF_ENABLE_DISABLE]:
+        cg.add_define("EHDP_ENABLE_DISABLE")
+        cg.add(var.set_enable_disable_feature(True))
+    elif CONF_ID in config:
+        # Provide helpful hint if user has an id but enable_disable is not set
+        _LOGGER.info(
+            "ehDP: Component has an 'id' but 'enable_disable' is false. "
+            "If you want to use enable()/disable()/is_enabled() methods, "
+            "add 'enable_disable: true' to your ehdp configuration."
+        )

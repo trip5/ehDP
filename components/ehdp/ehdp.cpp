@@ -28,16 +28,51 @@ static const char *PROTO      = "ehdp/1.0";
 // setup
 // ---------------------------------------------------------------------------
 
+void EhDPComponent::dump_config() {
+  ESP_LOGCONFIG(TAG, "ehDP Discovery Protocol");
+  if (sock_ < 0) {
+    ESP_LOGCONFIG(TAG, "  Status: DISABLED");
+  } else {
+    ESP_LOGCONFIG(TAG, "  Port: %u", PORT);
+    std::string ip = get_ip_str_();
+    ESP_LOGCONFIG(TAG, "  IP: %s", ip.c_str());
+  }
+}
+
 void EhDPComponent::setup() {
+  ESP_LOGCONFIG(TAG, "Setting up ehDP...");
+  
+#ifdef EHDP_ENABLE_DISABLE
+  // Initialize preference object for enable/disable feature
+  pref_ = global_preferences->make_preference<bool>(fnv1_hash("ehdp_enabled"));
+  
+  // Restore user preference
+  bool restored_disabled = false;
+  if (pref_.load(&restored_disabled)) {
+    user_disabled_ = restored_disabled;
+    ESP_LOGCONFIG(TAG, "Restored state: %s", user_disabled_ ? "disabled" : "enabled");
+  }
+  
+  // If user previously disabled it, don't start the socket
+  if (user_disabled_) {
+    ESP_LOGCONFIG(TAG, "ehDP disabled by user preference");
+    sock_ = -1;
+    return;
+  }
+#endif
+  
   #ifdef ESP32
+    ESP_LOGD(TAG, "Creating UDP socket (ESP32)");
     sock_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock_ < 0) {
       ESP_LOGE(TAG, "Failed to create UDP socket");
       this->mark_failed();
       return;
     }
+    ESP_LOGD(TAG, "Socket created, setting options");
     int opt = 1;
     setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    ESP_LOGD(TAG, "Binding to port %u", PORT);
     struct sockaddr_in addr{};
     addr.sin_family      = AF_INET;
     addr.sin_port        = htons(PORT);
@@ -49,7 +84,9 @@ void EhDPComponent::setup() {
       this->mark_failed();
       return;
     }
+    ESP_LOGD(TAG, "Socket bound successfully");
   #else // ESP8266 fallback to WiFiUDP
+    ESP_LOGD(TAG, "Creating UDP (ESP8266)");
     WiFiUDP *udp = new WiFiUDP();
     if (!udp->begin(PORT)) {
       ESP_LOGE(TAG, "Failed to bind UDP port %u", PORT);
@@ -58,11 +95,7 @@ void EhDPComponent::setup() {
     }
     sock_ = (int)udp; // Store pointer as int for simplicity in this component
   #endif
-  ESP_LOGI(TAG, "ehDP listening on port %u", PORT);
-  if (!project_.empty()) ESP_LOGI(TAG, "  project  : %s", project_.c_str());
-  if (!firmware_.empty()) ESP_LOGI(TAG, "  firmware : %s", firmware_.c_str());
-  if (!name_.empty())    ESP_LOGI(TAG, "  name     : %s", name_.c_str());
-  if (!material_symbol_.empty()) ESP_LOGI(TAG, "  symbol   : %s", material_symbol_.c_str());
+  ESP_LOGD(TAG, "ehDP setup complete, sock_ = %d", sock_);
 }
 
 void EhDPComponent::loop() {
@@ -156,24 +189,71 @@ std::string EhDPComponent::build_json_() {
   return out;
 }
 
+#ifdef EHDP_ENABLE_DISABLE
+
 void EhDPComponent::disable() {
-  if (sock_ < 0) return;
-  ESP_LOGI(TAG, "Disabling ehDP discovery");
-  #ifdef ESP32
-    close(sock_);
-  #else
-    WiFiUDP *udp = (WiFiUDP *)sock_;
-    udp->stop();
-    delete udp;
-  #endif
-  sock_ = -1;
+  if (sock_ < 0 && user_disabled_) {
+    ESP_LOGD(TAG, "ehDP already disabled");
+    return;
+  }
+  ESP_LOGD(TAG, "Disabling ehDP discovery");
+  user_disabled_ = true;
+  pref_.save(&user_disabled_);
+  if (sock_ >= 0) {
+    #ifdef ESP32
+      close(sock_);
+    #else
+      WiFiUDP *udp = (WiFiUDP *)sock_;
+      udp->stop();
+      delete udp;
+    #endif
+    sock_ = -1;
+  }
 }
 
 void EhDPComponent::enable() {
-  if (sock_ >= 0) return; // Already enabled
-  ESP_LOGI(TAG, "Enabling ehDP discovery");
-  setup(); // Re-run setup to bind socket
+  ESP_LOGD(TAG, "enable() called, current sock_ = %d", sock_);
+  if (sock_ >= 0) {
+    ESP_LOGD(TAG, "ehDP already enabled, nothing to do");
+    user_disabled_ = false;
+    pref_.save(&user_disabled_);
+    return; // Already enabled
+  }
+  ESP_LOGD(TAG, "Enabling ehDP discovery");
+  user_disabled_ = false;
+  pref_.save(&user_disabled_);
+  #ifdef ESP32
+    sock_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (sock_ < 0) {
+      ESP_LOGE(TAG, "Failed to create UDP socket");
+      return;
+    }
+    int opt = 1;
+    setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    struct sockaddr_in addr{};
+    addr.sin_family      = AF_INET;
+    addr.sin_port        = htons(PORT);
+    addr.sin_addr.s_addr = INADDR_ANY;
+    if (bind(sock_, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+      ESP_LOGE(TAG, "Failed to bind UDP socket on port %u", PORT);
+      close(sock_);
+      sock_ = -1;
+      return;
+    }
+  #else
+    WiFiUDP *udp = new WiFiUDP();
+    if (!udp->begin(PORT)) {
+      ESP_LOGE(TAG, "Failed to bind UDP port %u", PORT);
+      delete udp;
+      sock_ = -1;
+      return;
+    }
+    sock_ = (int)udp;
+  #endif
+  ESP_LOGD(TAG, "ehDP discovery enabled, sock_ = %d", sock_);
 }
+
+#endif  // EHDP_ENABLE_DISABLE
 
 }  // namespace ehdp
 }  // namespace esphome

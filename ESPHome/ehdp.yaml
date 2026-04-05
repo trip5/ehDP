@@ -40,10 +40,14 @@ ehdp:
   #   See: https://fonts.google.com/icons
   material_symbol: "0xe192"
 
-  # OPTIONAL: id
-  #   With an id, you can call disable or enable in lambdas (eee below).
+  # OPTIONAL: id (required if using enable_disable feature below with a switch)
   # id: my_ehdp
 
+  # OPTIONAL: Enable/disable feature (default: false)
+  #   Set to true to enable runtime enable/disable via switch
+  #   This adds state persistence and enable()/disable() methods
+  #   Without this, ehDP is always on
+  # enable_disable: true
 
   # Values for project, firmware, name, and mdns are automatically pulled 
   # from your global 'esphome:' section, reducing configuration redundancy.
@@ -63,11 +67,16 @@ ehdp:
   #   - homeassistant
 
 # Example switch to disable/enable Discovery
-switch:
-  - platform: template
-    name: "ehDP Discovery"
-    lambda: return id(my_ehdp).is_enabled();
-    turn_on_action:
-      - lambda: id(my_ehdp).enable();
-    turn_off_action:
-      - lambda: id(my_ehdp).disable();
+# NOTE: This requires enable_disable: true in the ehdp section above!
+# Uncomment both the ehdp id and enable_disable, and this switch to use this feature
+# switch:
+#   - platform: template
+#     name: "ehDP Discovery"
+#     id: ehdp_discovery
+#     lambda: return id(my_ehdp).is_enabled();
+#     turn_on_action:
+#       - lambda: id(my_ehdp).enable();
+#     turn_off_action:
+#       - lambda: id(my_ehdp).disable();
+#     entity_category: config
+#     icon: mdi:home-variant
