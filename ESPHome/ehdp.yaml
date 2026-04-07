@@ -81,7 +81,7 @@ ehdp:
 #     entity_category: config
 #     icon: mdi:home-variant
 # 
-# # Sync switch state with component state after boot
+# # Sync switch state with component state after boot (because restore_mode: will break ehDP)
 # esphome:
 #   on_boot:
 #     priority: -100  # Run after everything else is initialized
