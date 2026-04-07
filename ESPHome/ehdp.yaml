@@ -74,10 +74,17 @@ ehdp:
 #     name: "ehDP Discovery"
 #     id: ehdp_discovery
 #     optimistic: true
-#     restore_mode: RESTORE_DEFAULT_ON
 #     turn_on_action:
 #       - lambda: id(my_ehdp).enable();
 #     turn_off_action:
 #       - lambda: id(my_ehdp).disable();
 #     entity_category: config
 #     icon: mdi:home-variant
+# 
+# # Sync switch state with component state after boot
+# esphome:
+#   on_boot:
+#     priority: -100  # Run after everything else is initialized
+#     then:
+#       - lambda: |-
+#           id(ehdp_discovery).publish_state(id(my_ehdp).is_enabled());
