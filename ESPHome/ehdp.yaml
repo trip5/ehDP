@@ -67,8 +67,11 @@ ehdp:
   #   - homeassistant
 
 # Example switch to disable/enable Discovery
-# NOTE: This requires enable_disable: true in the ehdp section above!
-# Uncomment both the ehdp id and enable_disable, and this switch to use this feature
+# NOTE: This requires BOTH:
+#   1. enable_disable: true in the ehdp section above
+#   2. The on_boot automation below to sync initial state
+#
+# Uncomment the ehdp id, enable_disable, this switch, AND the on_boot section:
 # switch:
 #   - platform: template
 #     name: "ehDP Discovery"
@@ -81,10 +84,10 @@ ehdp:
 #     entity_category: config
 #     icon: mdi:home-variant
 # 
-# # Sync switch state with component state after boot (because restore_mode: will break ehDP)
-# esphome:
-#   on_boot:
-#     priority: -100  # Run after everything else is initialized
-#     then:
-#       - lambda: |-
-#           id(ehdp_discovery).publish_state(id(my_ehdp).is_enabled());
+# # REQUIRED: Sync switch state with component on boot
+# # (Using restore_mode causes initialization timing issues)
+# on_boot:
+#   priority: -100  # Run after everything else initialized
+#   then:
+#     - lambda: |-
+#         id(ehdp_discovery).publish_state(id(my_ehdp).is_enabled());
